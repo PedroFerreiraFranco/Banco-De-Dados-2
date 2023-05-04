@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
   `dataHora` datetime DEFAULT NULL,
   `usuario` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`codAuditoria`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COMMENT='Registra as principais alterações neste BD.';
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='Registra as principais alterações neste BD.';
 
 -- Copiando dados para a tabela agencia3si2023.auditoria: ~34 rows (aproximadamente)
 /*!40000 ALTER TABLE `auditoria` DISABLE KEYS */;
@@ -65,7 +65,8 @@ INSERT INTO `auditoria` (`codAuditoria`, `acao`, `tabela`, `dataHora`, `usuario`
 	(44, 'Conta iserida: 9. Com tipo: Poupança. Saldo de: 0.01', 'conta', '2023-04-27 10:15:15', 'root@localhost'),
 	(47, 'CPF do cliente: PEDRO GUSTAVO foi alterado para 1', 'cliente', '2023-04-27 10:47:11', 'root@localhost'),
 	(48, 'CPF do cliente: ROSÁLIA PEREIRA foi alterado para 777.036.036-78', 'cliente', '2023-04-27 10:47:25', 'root@localhost'),
-	(49, 'Conta iserida: 10. Com tipo: Poupança. Saldo de: 1000.00', 'conta', '2023-05-04 10:13:22', 'root@localhost');
+	(49, 'Conta iserida: 10. Com tipo: Poupança. Saldo de: 1000.00', 'conta', '2023-05-04 10:13:22', 'root@localhost'),
+	(52, 'Conta removida: 10', 'conta', '2023-05-04 10:57:07', 'root@localhost');
 /*!40000 ALTER TABLE `auditoria` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela agencia3si2023.cliente
@@ -115,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `conta` (
   PRIMARY KEY (`idCONTA`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela agencia3si2023.conta: ~8 rows (aproximadamente)
+-- Copiando dados para a tabela agencia3si2023.conta: ~9 rows (aproximadamente)
 /*!40000 ALTER TABLE `conta` DISABLE KEYS */;
 INSERT INTO `conta` (`idCONTA`, `tipo`, `saldo`, `senha`) VALUES
 	(1, 'Salário', 805.50, 'abc123'),
@@ -125,8 +126,7 @@ INSERT INTO `conta` (`idCONTA`, `tipo`, `saldo`, `senha`) VALUES
 	(6, 'Poupança', 18523.00, 'gugu'),
 	(7, 'Poupança', 0.01, 'abc'),
 	(8, 'Poupança', 0.01, 'abc'),
-	(9, 'Poupança', 0.01, 'abc'),
-	(10, 'Poupança', 100.20, 'abc');
+	(9, 'Poupança', 0.01, 'abc');
 /*!40000 ALTER TABLE `conta` ENABLE KEYS */;
 
 -- Copiando estrutura para tabela agencia3si2023.contavinculada
@@ -243,6 +243,17 @@ CREATE TRIGGER `tri_insereClientePoupanca` AFTER INSERT ON `cliente` FOR EACH RO
 	SELECT idCLIENTE INTO @novoCliente from cliente ORDER BY idCLIENTE DESC LIMIT 1;
 	SELECT idCONTA INTO @novaConta from conta ORDER BY idCONTA DESC LIMIT 1;
 	INSERT INTO contavinculada VALUES(@novoCliente, @novaConta, NOW());	
+END//
+DELIMITER ;
+SET SQL_MODE=@OLDTMP_SQL_MODE;
+
+-- Copiando estrutura para trigger agencia3si2023.tri_logApagaConta
+DROP TRIGGER IF EXISTS `tri_logApagaConta`;
+SET @OLDTMP_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION';
+DELIMITER //
+CREATE TRIGGER `tri_logApagaConta` AFTER DELETE ON `conta` FOR EACH ROW BEGIN
+	set @mensagem=concat("Conta removida: ", old.idConta);
+	insert into auditoria values(null, @mensagem, "conta", now(), user());
 END//
 DELIMITER ;
 SET SQL_MODE=@OLDTMP_SQL_MODE;
