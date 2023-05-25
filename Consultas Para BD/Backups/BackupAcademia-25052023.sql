@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   CONSTRAINT `fk_CLIENTES_PLANOS1` FOREIGN KEY (`PLANOS_codPLANOS`) REFERENCES `planos` (`codPLANOS`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela academia.clientes: ~6 rows (aproximadamente)
+-- Copiando dados para a tabela academia.clientes: ~7 rows (aproximadamente)
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
 INSERT INTO `clientes` (`codCLIENTES`, `nome`, `cpf`, `dataNascimento`, `telefone`, `email`, `endereco`, `cidade`, `PLANOS_codPLANOS`) VALUES
 	(1, 'Fabio', '111.111.111-11', '1980-05-15', '(35)998602715', 'fabio@gmail.com', 'Sítio Shekinah', 'Machado', 6),
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `funcionarios` (
   CONSTRAINT `fk_FUNCIONARIOS_CARGO1` FOREIGN KEY (`CARGO_codCARGO`) REFERENCES `cargos` (`codCARGO`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela academia.funcionarios: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela academia.funcionarios: ~2 rows (aproximadamente)
 /*!40000 ALTER TABLE `funcionarios` DISABLE KEYS */;
 INSERT INTO `funcionarios` (`codFUNCIONARIOS`, `nome`, `cpf`, `dataNascimento`, `telefone`, `email`, `endereco`, `cidade`, `carteiraTrabalho`, `dataAdmissao`, `dataDemissao`, `CARGO_codCARGO`) VALUES
 	(1, 'Fernado Souza', '45321456789', '1998-04-16', '988763454', 'fernando@gmail.com', 'Rua Barao Diniz, 233', 'Machado', '564545644', '2022-10-31', '0000-00-00', 2),
@@ -511,7 +511,7 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   CONSTRAINT `fk_VENDAS_FUNCIONARIOS1` FOREIGN KEY (`FUNCIONARIOS_codFUNCIONARIOS`) REFERENCES `funcionarios` (`codFUNCIONARIOS`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
--- Copiando dados para a tabela academia.vendas: ~0 rows (aproximadamente)
+-- Copiando dados para a tabela academia.vendas: ~1 rows (aproximadamente)
 /*!40000 ALTER TABLE `vendas` DISABLE KEYS */;
 INSERT INTO `vendas` (`codVENDA`, `dataHora`, `desconto`, `tipoVenda`, `CLIENTES_codCLIENTES`, `CLIENTES_PLANOS_codPLANOS`, `FUNCIONARIOS_codFUNCIONARIOS`) VALUES
 	(2, '2022-05-19 18:30:00', 5.00, 'Cartão Débito', 1, 5, 1);
